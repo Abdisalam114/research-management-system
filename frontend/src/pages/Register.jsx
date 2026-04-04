@@ -40,11 +40,9 @@ export default function Register() {
       <Toaster position="top-right" />
       <div className="auth-card" style={{ maxWidth: '480px' }}>
         <div className="auth-logo" style={{ marginBottom: '24px' }}>
-          <div className="logo-icon-lg">
-            <UserPlus color="white" size={28} />
-          </div>
-          <h1 className="auth-title">Create Account</h1>
-          <p className="auth-sub">Join the Research Portal</p>
+          <img src="/logo.png" alt="Jamhuriya Logo" style={{ width: '80px', height: '80px', margin: '0 auto 16px', display: 'block', objectFit: 'contain' }} />
+          <h1 className="auth-title">Jamhuriya Research Portal</h1>
+          <p className="auth-sub">Sign up to manage your research</p>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -92,6 +90,15 @@ export default function Register() {
                 onChange={handleChange}
               />
             </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Role</label>
+            <select name="role" className="form-select" value={formData.role || ''} onChange={handleChange} required>
+              <option value="">Select Role...</option>
+              <option value="researcher">Researcher</option>
+              <option value="student">Student</option>
+            </select>
           </div>
 
           <div className="form-group" style={{ marginBottom: '24px' }}>

@@ -13,9 +13,11 @@ const publicationSchema = new mongoose.Schema({
   keywords: [String],
   type: {
     type: String,
-    enum: ['journal', 'conference', 'book_chapter', 'thesis', 'other'],
+    enum: ['journal', 'conference', 'book_chapter', 'thesis', 'patent', 'other'],
     default: 'journal'
   },
+  impactFactor: { type: Number, default: 0 },
+  patentNumber: { type: String, default: '' },
   status: {
     type: String,
     enum: ['draft', 'submitted', 'under_review', 'published', 'rejected'],

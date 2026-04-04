@@ -2,7 +2,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { 
   LayoutDashboard, FileText, Briefcase, BookOpen, 
-  Wallet, PieChart, Users, Settings, LogOut
+  Wallet, PieChart, Users, Settings, LogOut, 
+  DollarSign, UsersRound, User
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -15,33 +16,44 @@ export default function Sidebar() {
   };
 
   const navLinks = [
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'Proposals', path: '/proposals', icon: FileText },
-    { name: 'Projects', path: '/projects', icon: Briefcase },
-    { name: 'Publications', path: '/publications', icon: BookOpen },
-    { name: 'Budgets', path: '/budgets', icon: Wallet },
-    { name: 'Reports', path: '/reports', icon: PieChart },
+    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['admin', 'coordinator', 'finance', 'researcher', 'student'] },
+    { name: 'Proposals', path: '/proposals', icon: FileText, roles: ['admin', 'coordinator', 'researcher', 'student'] },
+    { name: 'Projects', path: '/projects', icon: Briefcase, roles: ['admin', 'coordinator', 'finance', 'researcher', 'student'] },
+    { name: 'Publications', path: '/publications', icon: BookOpen, roles: ['admin', 'coordinator', 'researcher', 'student'] },
+    { name: 'Grants', path: '/grants', icon: DollarSign, roles: ['admin', 'coordinator', 'finance', 'researcher', 'student'] },
+    { name: 'Budgets', path: '/budgets', icon: Wallet, roles: ['admin', 'finance', 'researcher', 'student'] },
+    { name: 'Reports', path: '/reports', icon: PieChart, roles: ['admin', 'coordinator', 'finance'] },
+    { name: 'Research Groups', path: '/research-groups', icon: UsersRound, roles: ['admin', 'coordinator', 'researcher', 'student'] },
+    { name: 'My Profile', path: '/profile', icon: User, roles: ['researcher', 'student'] },
   ];
 
-  if (user?.role === 'admin') {
-    navLinks.push({ name: 'Users', path: '/users', icon: Users });
-    navLinks.push({ name: 'Settings', path: '/settings', icon: Settings });
-  }
+  const adminLinks = [
+    { name: 'Users', path: '/users', icon: Users, roles: ['admin'] },
+    { name: 'Settings', path: '/settings', icon: Settings, roles: ['admin'] },
+  ];
+
+  const visibleNav = navLinks.filter(l => l.roles.includes(user?.role));
+  const visibleAdmin = adminLinks.filter(l => l.roles.includes(user?.role));
+
+  const getRoleBadge = (role) => {
+    const labels = { admin: 'Research Director', coordinator: 'Faculty Coordinator', finance: 'Finance Officer', researcher: 'Researcher', student: 'Student' };
+    return labels[role] || role;
+  };
 
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <div className="logo-icon">R</div>
+        <img src="/logo.png" alt="Jamhuriya Logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
         <div>
-          <div className="logo-text">ResearchPortal</div>
-          <div className="logo-sub">Management System</div>
+          <div className="logo-text" style={{ fontSize: '0.9rem', lineHeight: '1.2' }}>Jamhuriya</div>
+          <div className="logo-sub">Research Portal</div>
         </div>
       </div>
 
       <nav className="sidebar-nav">
         <div className="nav-section">
           <div className="nav-section-label">Main Menu</div>
-          {navLinks.map((link) => (
+          {visibleNav.map((link) => (
             <NavLink 
               key={link.path} 
               to={link.path}
@@ -53,6 +65,23 @@ export default function Sidebar() {
             </NavLink>
           ))}
         </div>
+
+        {visibleAdmin.length > 0 && (
+          <div className="nav-section">
+            <div className="nav-section-label">Administration</div>
+            {visibleAdmin.map((link) => (
+              <NavLink 
+                key={link.path} 
+                to={link.path}
+                end
+                className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+              >
+                <link.icon className="nav-icon" />
+                {link.name}
+              </NavLink>
+            ))}
+          </div>
+        )}
       </nav>
 
       <div className="sidebar-footer">
@@ -62,7 +91,7 @@ export default function Sidebar() {
           </div>
           <div className="sidebar-user-info">
             <div className="user-name">{user?.name || 'User Name'}</div>
-            <div className="user-role">{user?.role || 'user role'}</div>
+            <div className="user-role">{getRoleBadge(user?.role)}</div>
           </div>
         </div>
         <button className="logout-btn" onClick={handleLogout}>

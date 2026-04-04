@@ -8,12 +8,27 @@ export default function Publications() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
+  const fetchPubs = () => {
+    setLoading(true);
     publicationsAPI.getAll()
       .then(res => setPublications(res.data))
       .catch(err => toast.error('Failed to load publications'))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchPubs();
   }, []);
+
+  const handleVerify = async (id) => {
+    try {
+      await publicationsAPI.verify(id);
+      toast.success('Publication verified!');
+      fetchPubs();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Error verifying publication');
+    }
+  };
 
   const getStatusBadge = (status) => {
     return <span className={`badge badge-${status}`}>{(status || '').replace('_', ' ').toUpperCase()}</span>;
@@ -89,7 +104,12 @@ export default function Publications() {
                     <td style={{ fontWeight: 700 }}>{p.citationCount || 0}</td>
                     <td>{getStatusBadge(p.status)}</td>
                     <td>
-                      <button className="btn btn-sm btn-secondary">Details</button>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button className="btn btn-sm btn-secondary">Details</button>
+                        {p.status !== 'verified' && p.status !== 'published' && (
+                          <button className="btn btn-sm btn-success" onClick={() => handleVerify(p._id)}>Verify</button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -32,10 +32,8 @@ export default function Login() {
       <Toaster position="top-right" />
       <div className="auth-card">
         <div className="auth-logo">
-          <div className="logo-icon-lg">
-            <LogIn color="white" size={28} />
-          </div>
-          <h1 className="auth-title">ResearchPortal</h1>
+          <img src="/logo.png" alt="Jamhuriya Logo" style={{ width: '80px', height: '80px', margin: '0 auto 16px', display: 'block', objectFit: 'contain' }} />
+          <h1 className="auth-title">Jamhuriya Research Portal</h1>
           <p className="auth-sub">Sign in to manage your research</p>
         </div>
 

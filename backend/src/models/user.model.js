@@ -7,14 +7,18 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true, minlength: 6 },
   role: {
     type: String,
-    enum: ['admin', 'coordinator', 'finance', 'researcher'],
+    enum: ['admin', 'coordinator', 'finance', 'researcher', 'student'],
     default: 'researcher'
   },
-  status: { type: String, enum: ['pending', 'active', 'rejected'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'active', 'rejected', 'inactive'], default: 'pending' },
   rank: { type: String, default: '' },
   department: { type: String, default: '' },
   phone: { type: String, default: '' },
   bio: { type: String, default: '' },
+  researchInterests: [String],
+  specialization: { type: String, default: '' },
+  orcid: { type: String, default: '' },
+  googleScholarId: { type: String, default: '' },
   refreshToken: { type: String, default: null }
 }, { timestamps: true });
 

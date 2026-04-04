@@ -10,6 +10,7 @@ export const usersAPI = {
   getMe: () => api.get('/users/me'),
   getAll: (params) => api.get('/users', { params }),
   getOne: (id) => api.get(`/users/${id}`),
+  getProfile: (id) => api.get(`/users/${id}/profile`),
   approve: (id) => api.patch(`/users/${id}/approve`),
   reject: (id) => api.patch(`/users/${id}/reject`),
   update: (id, data) => api.patch(`/users/${id}`, data),
@@ -21,7 +22,9 @@ export const proposalsAPI = {
   getOne: (id) => api.get(`/proposals/${id}`),
   create: (data) => api.post('/proposals', data),
   update: (id, data) => api.patch(`/proposals/${id}`, data),
+  assignReviewer: (id, data) => api.patch(`/proposals/${id}/assign-reviewer`, data),
   review: (id, data) => api.patch(`/proposals/${id}/review`, data),
+  updateEthics: (id, data) => api.patch(`/proposals/${id}/ethics`, data),
   decide: (id, data) => api.patch(`/proposals/${id}/decision`, data),
   delete: (id) => api.delete(`/proposals/${id}`),
 };
@@ -51,6 +54,30 @@ export const budgetsAPI = {
   deleteExpense: (projectId, expenseId) => api.delete(`/budgets/${projectId}/expenses/${expenseId}`),
 };
 
+export const grantsAPI = {
+  getAll: (params) => api.get('/grants', { params }),
+  getOne: (id) => api.get(`/grants/${id}`),
+  create: (data) => api.post('/grants', data),
+  update: (id, data) => api.patch(`/grants/${id}`, data),
+  review: (id, data) => api.patch(`/grants/${id}/review`, data),
+  delete: (id) => api.delete(`/grants/${id}`),
+};
+
+export const notificationsAPI = {
+  getAll: (params) => api.get('/notifications', { params }),
+  markRead: (id) => api.patch(`/notifications/${id}/read`),
+  markAllRead: () => api.patch('/notifications/read-all'),
+  delete: (id) => api.delete(`/notifications/${id}`),
+};
+
+export const researchGroupsAPI = {
+  getAll: (params) => api.get('/research-groups', { params }),
+  getOne: (id) => api.get(`/research-groups/${id}`),
+  create: (data) => api.post('/research-groups', data),
+  update: (id, data) => api.patch(`/research-groups/${id}`, data),
+  delete: (id) => api.delete(`/research-groups/${id}`),
+};
+
 export const dashboardAPI = {
   getStats: () => api.get('/dashboard/stats'),
 };
@@ -58,4 +85,7 @@ export const dashboardAPI = {
 export const reportsAPI = {
   publications: (params) => api.get('/reports/publications', { params }),
   projects: (params) => api.get('/reports/projects', { params }),
+  grants: (params) => api.get('/reports/grants', { params }),
+  budgetUtilization: (params) => api.get('/reports/budget-utilization', { params }),
+  facultyProductivity: (params) => api.get('/reports/faculty-productivity', { params }),
 };

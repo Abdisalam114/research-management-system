@@ -13,6 +13,9 @@ const publicationRoutes = require('./src/routes/publication.routes');
 const budgetRoutes = require('./src/routes/budget.routes');
 const dashboardRoutes = require('./src/routes/dashboard.routes');
 const reportRoutes = require('./src/routes/report.routes');
+const grantRoutes = require('./src/routes/grant.routes');
+const notificationRoutes = require('./src/routes/notification.routes');
+const researchGroupRoutes = require('./src/routes/researchGroup.routes');
 
 const { errorHandler } = require('./src/middleware/error.middleware');
 
@@ -35,6 +38,9 @@ app.use('/api/publications', publicationRoutes);
 app.use('/api/budgets', budgetRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/grants', grantRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/research-groups', researchGroupRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', time: new Date() }));
 

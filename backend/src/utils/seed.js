@@ -7,9 +7,13 @@ const Publication = require('../models/publication.model');
 const Budget = require('../models/budget.model');
 const Department = require('../models/department.model');
 
+const randomDate = (start, end) => {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+};
+
 const seed = async () => {
   await mongoose.connect(process.env.MONGO_URI);
-  console.log('🌱 Seeding database...');
+  console.log('🌱 Seeding database with 7 years of data...');
 
   // Clear
   await Promise.all([User.deleteMany(), Proposal.deleteMany(), Project.deleteMany(), Publication.deleteMany(), Budget.deleteMany(), Department.deleteMany()]);
@@ -18,7 +22,9 @@ const seed = async () => {
   const depts = await Department.insertMany([
     { name: 'Computer Science', code: 'CS' },
     { name: 'Biomedical Engineering', code: 'BME' },
-    { name: 'Environmental Sciences', code: 'ENV' }
+    { name: 'Environmental Sciences', code: 'ENV' },
+    { name: 'Social Sciences', code: 'SOC' },
+    { name: 'Economics', code: 'ECON' }
   ]);
 
   // Users (password = Password123)
@@ -26,175 +32,100 @@ const seed = async () => {
   const coordinator = await User.create({ name: 'Dr. Sarah Chen', email: 'coordinator@rms.edu', password: 'Password123', role: 'coordinator', status: 'active', department: 'CS', rank: 'Associate Professor' });
   const finance = await User.create({ name: 'Mr. James Okafor', email: 'finance@rms.edu', password: 'Password123', role: 'finance', status: 'active', department: 'BME', rank: 'Finance Officer' });
   const researcher = await User.create({ name: 'Dr. Aisha Musa', email: 'researcher@rms.edu', password: 'Password123', role: 'researcher', status: 'active', department: 'ENV', rank: 'Lecturer' });
-  const pending = await User.create({ name: 'John Pending', email: 'pending@rms.edu', password: 'Password123', role: 'researcher', status: 'pending', department: 'CS', rank: 'PhD Student' });
+  
+  const researchers = [researcher];
+  for(let i=1; i<=10; i++) {
+    const r = await User.create({ 
+      name: `Researcher ${i}`, 
+      email: `researcher${i}@rms.edu`, 
+      password: 'Password123', 
+      role: 'researcher', 
+      status: 'active', 
+      department: depts[i % depts.length].code, 
+      rank: i % 2 === 0 ? 'Senior Lecturer' : 'Assistant Professor' 
+    });
+    researchers.push(r);
+  }
 
-  // Proposals
-  const p1 = await Proposal.create({
-    title: 'AI-Driven Climate Change Prediction Model',
-    abstract: 'This research proposes developing a machine learning model to predict climate change impacts using satellite imagery and IoT sensor data.',
-    keywords: ['AI', 'climate', 'machine learning', 'IoT'],
-    researchers: [researcher._id],
-    submittedBy: researcher._id,
-    status: 'approved',
-    estimatedBudget: 150000,
-    duration: 18,
-    department: 'CS',
-    coordinatorReview: { reviewer: coordinator._id, comment: 'Excellent proposal, highly relevant.', reviewedAt: new Date() },
-    directorDecision: { decidedBy: admin._id, comment: 'Approved with full budget.', decidedAt: new Date() }
-  });
+  const years = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
+  
+  console.log('📦 Creating Proposals, Projects, Budgets, and Publications...');
 
-  const p2 = await Proposal.create({
-    title: 'Nanotechnology for Drug Delivery Systems',
-    abstract: 'Investigation of nanoparticle-based drug delivery mechanisms for targeted cancer therapy.',
-    keywords: ['nanotechnology', 'drug delivery', 'cancer'],
-    researchers: [researcher._id, coordinator._id],
-    submittedBy: coordinator._id,
-    status: 'under_review',
-    estimatedBudget: 200000,
-    duration: 24,
-    department: 'BME',
-    coordinatorReview: { reviewer: coordinator._id, comment: 'Needs budget revision.', reviewedAt: new Date() }
-  });
+  for (const year of years) {
+    const numItems = Math.floor(Math.random() * 5) + 3; // 3 to 7 items per year
+    
+    for (let i = 0; i < numItems; i++) {
+      const dept = depts[Math.floor(Math.random() * depts.length)];
+      const lead = researchers[Math.floor(Math.random() * researchers.length)];
+      
+      const proposal = await Proposal.create({
+        title: `Research Study ${year}-${i}: ${dept.name} Innovation`,
+        abstract: `This multi-year study starting in ${year} explores advanced concepts in ${dept.name} with a focus on sustainable development.`,
+        keywords: [dept.code, 'Innovation', 'Research', year.toString()],
+        researchers: [lead._id],
+        submittedBy: lead._id,
+        status: year < 2026 ? 'approved' : 'under_review',
+        estimatedBudget: Math.floor(Math.random() * 400000) + 50000,
+        duration: Math.floor(Math.random() * 24) + 12,
+        department: dept.code,
+        directorDecision: { decidedBy: admin._id, comment: 'Strategic alignment approved.', decidedAt: new Date(year, 0, 1) }
+      });
 
-  const p3 = await Proposal.create({
-    title: 'Blockchain-Based Academic Record System',
-    abstract: 'A decentralized system for secure, immutable academic record management.',
-    keywords: ['blockchain', 'academic records', 'security'],
-    researchers: [researcher._id],
-    submittedBy: researcher._id,
-    status: 'draft',
-    estimatedBudget: 80000,
-    duration: 12,
-    department: 'CS'
-  });
+      if (year < 2026) {
+        const status = year < 2024 ? 'completed' : 'active';
+        const project = await Project.create({
+          proposal: proposal._id,
+          title: proposal.title,
+          description: proposal.abstract,
+          team: [lead._id],
+          leadResearcher: lead._id,
+          department: dept.code,
+          status: status,
+          progress: status === 'completed' ? 100 : Math.floor(Math.random() * 90),
+          startDate: new Date(year, Math.floor(Math.random() * 12), 1),
+          endDate: new Date(year + 2, Math.floor(Math.random() * 12), 1)
+        });
 
-  // Projects (from approved proposal)
-  const proj1 = await Project.create({
-    proposal: p1._id,
-    title: 'AI-Driven Climate Change Prediction Model',
-    description: p1.abstract,
-    team: [researcher._id, coordinator._id],
-    leadResearcher: researcher._id,
-    department: 'CS',
-    status: 'active',
-    progress: 45,
-    startDate: new Date('2024-01-15'),
-    endDate: new Date('2025-07-15'),
-    milestones: [
-      { title: 'Literature Review', dueDate: new Date('2024-03-01'), completed: true },
-      { title: 'Data Collection', dueDate: new Date('2024-06-01'), completed: true },
-      { title: 'Model Development', dueDate: new Date('2024-09-01'), completed: false },
-      { title: 'Testing & Validation', dueDate: new Date('2025-01-01'), completed: false },
-      { title: 'Publication & Dissemination', dueDate: new Date('2025-06-01'), completed: false }
-    ]
-  });
+        // Budget
+        await Budget.create({
+          project: project._id,
+          totalBudget: proposal.estimatedBudget,
+          expenses: [
+            { description: 'Initial Equipment', amount: proposal.estimatedBudget * 0.3, category: 'equipment', date: project.startDate },
+            { description: 'Personnel Costs', amount: proposal.estimatedBudget * 0.4, category: 'personnel', date: randomDate(project.startDate, project.endDate) }
+          ]
+        });
 
-  const proj2 = await Project.create({
-    proposal: p1._id,
-    title: 'Urban Air Quality Monitoring Network',
-    description: 'Deploying IoT sensors across the city to monitor air quality in real time.',
-    team: [researcher._id],
-    leadResearcher: researcher._id,
-    department: 'ENV',
-    status: 'completed',
-    progress: 100,
-    startDate: new Date('2023-01-01'),
-    endDate: new Date('2024-01-01'),
-    milestones: [
-      { title: 'Sensor Deployment', dueDate: new Date('2023-04-01'), completed: true },
-      { title: 'Data Pipeline', dueDate: new Date('2023-08-01'), completed: true },
-      { title: 'Final Report', dueDate: new Date('2023-12-01'), completed: true }
-    ]
-  });
-
-  // Budgets
-  await Budget.create({
-    project: proj1._id,
-    totalBudget: 150000,
-    expenses: [
-      { description: 'Server infrastructure setup', amount: 25000, category: 'equipment', date: new Date('2024-02-01') },
-      { description: 'Research team salaries - Q1', amount: 30000, category: 'personnel', date: new Date('2024-03-31') },
-      { description: 'Conference travel - IEEE', amount: 5500, category: 'travel', date: new Date('2024-04-15') },
-      { description: 'Software licenses', amount: 8000, category: 'materials', date: new Date('2024-05-01') }
-    ]
-  });
-
-  await Budget.create({
-    project: proj2._id,
-    totalBudget: 60000,
-    expenses: [
-      { description: 'IoT sensors purchase', amount: 20000, category: 'equipment', date: new Date('2023-02-01') },
-      { description: 'Field work expenses', amount: 8500, category: 'travel', date: new Date('2023-06-01') },
-      { description: 'Data analysis software', amount: 12000, category: 'materials', date: new Date('2023-07-01') }
-    ]
-  });
-
-  // Publications
-  await Publication.create([
-    {
-      project: proj2._id,
-      title: 'Real-Time Urban Air Quality Assessment Using IoT Sensor Networks',
-      authors: [researcher._id],
-      authorNames: ['Dr. Aisha Musa', 'Dr. Sarah Chen'],
-      year: 2024,
-      journal: 'Environmental Science & Technology',
-      doi: '10.1021/acs.est.2024.00123',
-      type: 'journal',
-      status: 'published',
-      citationCount: 14,
-      department: 'ENV',
-      submittedBy: researcher._id,
-      verifiedBy: admin._id,
-      verifiedAt: new Date()
-    },
-    {
-      project: proj1._id,
-      title: 'Federated Learning for Privacy-Preserving Climate Prediction',
-      authors: [researcher._id, coordinator._id],
-      authorNames: ['Dr. Aisha Musa', 'Dr. Sarah Chen'],
-      year: 2024,
-      conference: 'NeurIPS 2024',
-      type: 'conference',
-      status: 'submitted',
-      citationCount: 3,
-      department: 'CS',
-      submittedBy: researcher._id
-    },
-    {
-      title: 'Machine Learning Approaches in Environmental Science',
-      authors: [coordinator._id],
-      authorNames: ['Dr. Sarah Chen'],
-      year: 2023,
-      journal: 'Nature Machine Intelligence',
-      doi: '10.1038/nmi.2023.45',
-      type: 'journal',
-      status: 'published',
-      citationCount: 42,
-      department: 'CS',
-      submittedBy: coordinator._id,
-      verifiedBy: admin._id
-    },
-    {
-      title: 'Blockchain Security Models for Academic Institutions',
-      authors: [researcher._id],
-      authorNames: ['Dr. Aisha Musa'],
-      year: 2023,
-      journal: 'IEEE Transactions on Information Security',
-      type: 'journal',
-      status: 'under_review',
-      citationCount: 0,
-      department: 'CS',
-      submittedBy: researcher._id
+        // Publications
+        if (year < 2025) {
+          const numPubs = Math.floor(Math.random() * 2) + 1;
+          for (let j = 0; j < numPubs; j++) {
+            await Publication.create({
+              project: project._id,
+              title: `Scientific Findings from ${project.title} - Vol ${j+1}`,
+              authors: [lead._id],
+              authorNames: [lead.name],
+              year: year + 1,
+              journal: year % 2 === 0 ? 'International Journal of Science' : 'Nature Research',
+              type: 'journal',
+              status: 'published',
+              citationCount: Math.floor(Math.random() * 100),
+              department: dept.code,
+              submittedBy: lead._id,
+              verifiedBy: admin._id,
+              verifiedAt: new Date()
+            });
+          }
+        }
+      }
     }
-  ]);
+  }
 
-  console.log('✅ Seed complete!');
-  console.log('\n📋 Login credentials:');
+  console.log('✅ Seed complete with 7 years of history!');
+  console.log('\n📋 Login credentials (same as before):');
   console.log('  Admin:       admin@rms.edu       / Password123');
-  console.log('  Coordinator: coordinator@rms.edu / Password123');
-  console.log('  Finance:     finance@rms.edu     / Password123');
   console.log('  Researcher:  researcher@rms.edu  / Password123');
-  console.log('  Pending:     pending@rms.edu     / Password123');
+  
   await mongoose.disconnect();
 };
 
