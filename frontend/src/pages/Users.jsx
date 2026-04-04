@@ -50,7 +50,7 @@ export default function Users() {
 
   const startEdit = (u) => {
     setEditingId(u._id);
-    setEditValues({ rank: u.rank || '', department: u.department || '', role: u.role, status: u.status });
+    setEditValues({ name: u.name, rank: u.rank || '', department: u.department || '', role: u.role, status: u.status });
   };
 
   const cancelEdit = () => {
@@ -220,7 +220,18 @@ export default function Users() {
                   const isEditing = editingId === u._id;
                   return (
                     <tr key={u._id}>
-                      <td style={{ fontWeight: 600 }}>{u.name}</td>
+                      <td>
+                        {isEditing ? (
+                          <input 
+                            className="form-input form-input-sm" 
+                            style={{ fontWeight: 600 }}
+                            value={editValues.name} 
+                            onChange={(e) => setEditValues({ ...editValues, name: e.target.value })}
+                          />
+                        ) : (
+                          <span style={{ fontWeight: 600 }}>{u.name}</span>
+                        )}
+                      </td>
                       <td style={{ color: 'var(--text-secondary)' }}>{u.email}</td>
                       <td>
                         {isEditing ? (
@@ -278,9 +289,7 @@ export default function Users() {
                             </>
                           ) : (
                             <>
-                              {u._id !== currentUser?._id && u.role !== 'admin' && (
-                                <button className="btn btn-sm btn-secondary" onClick={() => startEdit(u)}>Edit</button>
-                              )}
+                              <button className="btn btn-sm btn-secondary" onClick={() => startEdit(u)}>Edit</button>
                               {u._id !== currentUser?._id && currentUser?.role === 'admin' && (
                                 <button className="btn btn-sm btn-danger" onClick={() => handleDelete(u._id)}>Delete</button>
                               )}
