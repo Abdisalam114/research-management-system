@@ -95,6 +95,8 @@ export default function Users() {
 
   const getRoleBadge = (role) => {
     if (role === 'student') return <span className="badge badge-student">STUDENT</span>;
+    if (role === 'admin') return <span className="badge badge-admin">DIRECTOR</span>;
+    if (role === 'coordinator') return <span className="badge badge-coordinator">ASSIST DIRECTOR</span>;
     return <span className={`badge badge-${role}`}>{(role || '').toUpperCase()}</span>;
   };
   
@@ -147,9 +149,9 @@ export default function Users() {
                   <select className="form-select" value={newUser.role} onChange={e => setNewUser({...newUser, role: e.target.value})}>
                     <option value="researcher">RESEARCHER</option>
                     <option value="student">STUDENT</option>
-                    <option value="coordinator">COORDINATOR</option>
+                    <option value="coordinator">ASSIST DIRECTOR</option>
                     <option value="finance">FINANCE</option>
-                    <option value="admin">ADMIN</option>
+                    <option value="admin">DIRECTOR</option>
                   </select>
                 </div>
                 <div className="form-group">
@@ -237,10 +239,11 @@ export default function Users() {
                         {isEditing ? (
                           <input 
                             className="form-input form-input-sm" 
-                            value={editValues.department} 
+                            disabled={['admin', 'coordinator', 'finance'].includes(editValues.role)}
+                            value={['admin', 'coordinator', 'finance'].includes(editValues.role) ? 'N/A' : editValues.department} 
                             onChange={(e) => setEditValues({ ...editValues, department: e.target.value })}
                           />
-                        ) : u.department || '-'}
+                        ) : ['admin', 'coordinator', 'finance'].includes(u.role) ? 'N/A' : (u.department || '-')}
                       </td>
                       <td>
                         {isEditing ? (
@@ -260,9 +263,9 @@ export default function Users() {
                           >
                             <option value="researcher">RESEARCHER</option>
                             <option value="student">STUDENT</option>
-                            <option value="coordinator">COORDINATOR</option>
+                            <option value="coordinator">ASSIST DIRECTOR</option>
                             <option value="finance">FINANCE</option>
-                            <option value="admin">ADMIN</option>
+                            <option value="admin">DIRECTOR</option>
                           </select>
                         ) : getRoleBadge(u.role)}
                       </td>

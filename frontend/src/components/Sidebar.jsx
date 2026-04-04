@@ -36,7 +36,7 @@ export default function Sidebar() {
   const visibleAdmin = adminLinks.filter(l => l.roles.includes(user?.role));
 
   const getRoleBadge = (role) => {
-    const labels = { admin: 'Research Director', coordinator: 'Faculty Coordinator', finance: 'Finance Officer', researcher: 'Researcher', student: 'Student' };
+    const labels = { admin: 'Director', coordinator: 'Assist Director', finance: 'Finance', researcher: 'Researcher', student: 'Student' };
     return labels[role] || role;
   };
 
