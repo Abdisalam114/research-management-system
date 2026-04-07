@@ -258,6 +258,8 @@ export default function Users() {
                         {isEditing ? (
                           <select 
                             className="form-select form-input-sm" 
+                            disabled={u._id === currentUser?._id}
+                            title={u._id === currentUser?._id ? "You cannot change your own role to prevent lockout" : ""}
                             value={editValues.role}
                             onChange={(e) => setEditValues({ ...editValues, role: e.target.value })}
                           >
@@ -273,6 +275,8 @@ export default function Users() {
                         {isEditing ? (
                           <select 
                             className="form-select form-input-sm" 
+                            disabled={u._id === currentUser?._id}
+                            title={u._id === currentUser?._id ? "You cannot change your own status to prevent lockout" : ""}
                             value={editValues.status}
                             onChange={(e) => setEditValues({ ...editValues, status: e.target.value })}
                           >

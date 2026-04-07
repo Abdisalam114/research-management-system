@@ -89,12 +89,29 @@ exports.updateUser = async (req, res, next) => {
     const { name, department, rank, phone, bio, role, status, researchInterests, specialization, orcid, googleScholarId } = req.body;
     const isAdmin = req.user.role === 'admin';
     const isSelf = req.user._id.toString() === req.params.id;
+    
     if (!isAdmin && !isSelf) return res.status(403).json({ message: 'Not authorized' });
+    
     const updates = { name, department, rank, phone, bio, researchInterests, specialization, orcid, googleScholarId };
-    if (isAdmin && role) updates.role = role;
-    if (isAdmin && status) updates.status = status;
+    
+    // Safety: Prevent admin self-lockout
+    if (isAdmin && role) {
+      if (isSelf && role !== 'admin') {
+        return res.status(400).json({ message: 'System Safeguard: You cannot change your own Administrator role.' });
+      }
+      updates.role = role;
+    }
+    
+    if (isAdmin && status) {
+      if (isSelf && status !== 'active') {
+        return res.status(400).json({ message: 'System Safeguard: You cannot deactivate your own Administrator account.' });
+      }
+      updates.status = status;
+    }
+    
     // Remove undefined
     Object.keys(updates).forEach(k => updates[k] === undefined && delete updates[k]);
+    
     const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
@@ -104,6 +121,12 @@ exports.updateUser = async (req, res, next) => {
 // DELETE /api/users/:id
 exports.deleteUser = async (req, res, next) => {
   try {
+    const isAdmin = req.user.role === 'admin';
+    const isSelf = req.user._id.toString() === req.params.id;
+
+    if (!isAdmin) return res.status(403).json({ message: 'Only administrators can delete accounts.' });
+    if (isSelf) return res.status(400).json({ message: 'System Safeguard: You cannot delete your own account.' });
+
     await User.findByIdAndDelete(req.params.id);
     res.json({ message: 'User deleted' });
   } catch (err) { next(err); }
