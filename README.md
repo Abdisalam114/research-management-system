@@ -52,6 +52,13 @@ The platform is strictly role-based and implements an integrated 8-module approa
   - **Researcher** *(Faculty Members)*
   - **Student** *(Final Year Undergraduates / Post-Graduates)*
 
+### 🛡️ System Security & Safeguards
+To ensure robust institutional management and prevent accidental lockouts, the system includes:
+- **Lockout Prevention:** Administrators are strictly prohibited from deactivating their own accounts or changing their own roles.
+- **Protected Deletion:** Administrators cannot delete their own profiles.
+- **Backend Enforcement:** Identity-aware middleware and controller-level logic enforce these rules via the API.
+- **Identity Integrity:** Role-based access control (RBAC) ensures users only access modules assigned to their ranks.
+
 ---
 
 ## 🛠️ Technology Stack
