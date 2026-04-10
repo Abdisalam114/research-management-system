@@ -16,27 +16,27 @@ export default function Sidebar() {
   };
 
   const navLinks = [
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['admin', 'coordinator', 'finance', 'researcher', 'student'] },
-    { name: 'Proposals', path: '/proposals', icon: FileText, roles: ['admin', 'coordinator', 'researcher', 'student'] },
-    { name: 'Projects', path: '/projects', icon: Briefcase, roles: ['admin', 'coordinator', 'finance', 'researcher', 'student'] },
-    { name: 'Publications', path: '/publications', icon: BookOpen, roles: ['admin', 'coordinator', 'researcher', 'student'] },
-    { name: 'Grants', path: '/grants', icon: DollarSign, roles: ['admin', 'coordinator', 'finance', 'researcher', 'student'] },
-    { name: 'Budgets', path: '/budgets', icon: Wallet, roles: ['admin', 'finance', 'researcher', 'student'] },
-    { name: 'Reports', path: '/reports', icon: PieChart, roles: ['admin', 'coordinator', 'finance'] },
-    { name: 'Research Groups', path: '/research-groups', icon: UsersRound, roles: ['admin', 'coordinator', 'researcher', 'student'] },
-    { name: 'My Profile', path: '/profile', icon: User, roles: ['researcher', 'student'] },
+    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, roles: ['director', 'coordinator', 'finance', 'researcher'] },
+    { name: 'Proposals', path: '/proposals', icon: FileText, roles: ['director', 'coordinator', 'researcher'] },
+    { name: 'Projects', path: '/projects', icon: Briefcase, roles: ['director', 'coordinator', 'finance', 'researcher'] },
+    { name: 'Publications', path: '/publications', icon: BookOpen, roles: ['director', 'coordinator', 'researcher'] },
+    { name: 'Grants', path: '/grants', icon: DollarSign, roles: ['director', 'coordinator', 'finance', 'researcher'] },
+    { name: 'Budgets', path: '/budgets', icon: Wallet, roles: ['director', 'finance', 'researcher'] },
+    { name: 'Reports', path: '/reports', icon: PieChart, roles: ['director', 'coordinator', 'finance'] },
+    { name: 'Research Groups', path: '/research-groups', icon: UsersRound, roles: ['director', 'coordinator', 'researcher'] },
+    { name: 'My Profile', path: '/profile', icon: User, roles: ['researcher'] },
   ];
 
   const adminLinks = [
-    { name: 'Users', path: '/users', icon: Users, roles: ['admin'] },
-    { name: 'Settings', path: '/settings', icon: Settings, roles: ['admin'] },
+    { name: 'Users', path: '/users', icon: Users, roles: ['director'] },
+    { name: 'Settings', path: '/settings', icon: Settings, roles: ['director'] },
   ];
 
   const visibleNav = navLinks.filter(l => l.roles.includes(user?.role));
   const visibleAdmin = adminLinks.filter(l => l.roles.includes(user?.role));
 
   const getRoleBadge = (role) => {
-    const labels = { admin: 'Director', coordinator: 'Assist Director', finance: 'Finance', researcher: 'Researcher', student: 'Student' };
+    const labels = { director: 'Research Director', coordinator: 'Faculty Research Coordinator', finance: 'Finance Officer', researcher: 'Researcher' };
     return labels[role] || role;
   };
 

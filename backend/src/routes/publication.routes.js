@@ -7,7 +7,7 @@ router.get('/', getPublications);
 router.get('/:id', getPublication);
 router.post('/', createPublication);
 router.patch('/:id', updatePublication);
-router.patch('/:id/verify', authorize('admin', 'coordinator'), verifyPublication);
-router.delete('/:id', authorize('admin', 'coordinator'), deletePublication);
+router.patch('/:id/verify', authorize('director', 'coordinator'), verifyPublication);
+router.delete('/:id', authorize('director', 'coordinator'), deletePublication);
 
 module.exports = router;

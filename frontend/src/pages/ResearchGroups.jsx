@@ -13,8 +13,11 @@ export default function ResearchGroups() {
   const [showDetail, setShowDetail] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
   const [form, setForm] = useState({
-    name: '', description: '', department: '', researchThemes: '',
+    name: '', description: '', faculty: '', department: '', researchThemes: '',
     members: [], isInterdisciplinary: false
+  });
+  const [studentForm, setStudentForm] = useState({
+    studentId: '', studentName: '', faculty: '', department: '', className: ''
   });
 
   const fetchGroups = () => {
@@ -40,7 +43,7 @@ export default function ResearchGroups() {
       });
       toast.success('Research group created!');
       setShowModal(false);
-      setForm({ name: '', description: '', department: '', researchThemes: '', members: [], isInterdisciplinary: false });
+      setForm({ name: '', description: '', faculty: '', department: '', researchThemes: '', members: [], isInterdisciplinary: false });
       fetchGroups();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Error creating group');
@@ -56,13 +59,14 @@ export default function ResearchGroups() {
     } catch (err) { toast.error('Error deleting group'); }
   };
 
-  const toggleMember = (userId) => {
-    setForm(prev => ({
-      ...prev,
-      members: prev.members.includes(userId)
-        ? prev.members.filter(m => m !== userId)
-        : [...prev.members, userId]
-    }));
+  const addStudent = () => {
+    if(!studentForm.studentId || !studentForm.studentName) return toast.error('Student ID and Name are required');
+    setForm(prev => ({ ...prev, members: [...prev.members, studentForm] }));
+    setStudentForm({ studentId: '', studentName: '', faculty: '', department: '', className: '' });
+  };
+
+  const removeStudent = (index) => {
+    setForm(prev => ({ ...prev, members: prev.members.filter((_, i) => i !== index) }));
   };
 
   const filtered = groups.filter(g =>
@@ -78,7 +82,7 @@ export default function ResearchGroups() {
           <h1 className="page-title">Research Groups</h1>
           <p className="page-subtitle">Manage research collaboration groups and inter-faculty partnerships.</p>
         </div>
-        {['admin', 'coordinator'].includes(user?.role) && (
+        {['director', 'coordinator'].includes(user?.role) && (
           <button className="btn btn-primary" onClick={() => setShowModal(true)}>
             <Plus size={16} /> New Group
           </button>
@@ -159,6 +163,10 @@ export default function ResearchGroups() {
                   <textarea className="form-textarea" value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={3} />
                 </div>
                 <div className="form-group">
+                  <label className="form-label">Faculty</label>
+                  <input className="form-input" value={form.faculty} onChange={e => setForm({...form, faculty: e.target.value})} />
+                </div>
+                <div className="form-group">
                   <label className="form-label">Department</label>
                   <input className="form-input" value={form.department} onChange={e => setForm({...form, department: e.target.value})} />
                 </div>
@@ -173,18 +181,33 @@ export default function ResearchGroups() {
                   </label>
                 </div>
                 <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-                  <label className="form-label">Members</label>
-                  <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px' }}>
-                    {allUsers.filter(u => u._id !== user?._id).map(u => (
-                      <label key={u._id} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px', cursor: 'pointer', borderRadius: '6px' }}
-                        onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-secondary)'}
-                        onMouseLeave={e => e.currentTarget.style.background = ''}>
-                        <input type="checkbox" checked={form.members.includes(u._id)} onChange={() => toggleMember(u._id)} />
-                        <span style={{ fontSize: '0.85rem' }}>{u.name}</span>
-                        <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>({u.department || u.role})</span>
-                      </label>
-                    ))}
+                  <label className="form-label">Student Members</label>
+                  <div style={{ padding: '12px', border: '1px solid var(--border)', borderRadius: '8px', background: 'var(--bg-secondary)', marginBottom: '12px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
+                      <input className="form-input form-input-sm" placeholder="Student ID *" value={studentForm.studentId} onChange={e => setStudentForm({...studentForm, studentId: e.target.value})} />
+                      <input className="form-input form-input-sm" placeholder="Student Name *" value={studentForm.studentName} onChange={e => setStudentForm({...studentForm, studentName: e.target.value})} />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '8px' }}>
+                      <input className="form-input form-input-sm" placeholder="Faculty" value={studentForm.faculty} onChange={e => setStudentForm({...studentForm, faculty: e.target.value})} />
+                      <input className="form-input form-input-sm" placeholder="Department" value={studentForm.department} onChange={e => setStudentForm({...studentForm, department: e.target.value})} />
+                      <input className="form-input form-input-sm" placeholder="Class" value={studentForm.className} onChange={e => setStudentForm({...studentForm, className: e.target.value})} />
+                    </div>
+                    <button type="button" className="btn btn-sm btn-secondary" onClick={addStudent} style={{ width: '100%', justifyContent: 'center' }}>+ Add Student</button>
                   </div>
+                  
+                  {form.members.length > 0 && (
+                    <div style={{ maxHeight: '150px', overflowY: 'auto', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px' }}>
+                      {form.members.map((m, index) => (
+                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px', borderBottom: '1px solid var(--border)' }}>
+                          <div>
+                            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{m.studentName}</span>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginLeft: '8px' }}>{m.studentId} | {m.className}</span>
+                          </div>
+                          <button type="button" className="btn btn-icon" style={{ color: 'var(--danger)' }} onClick={() => removeStudent(index)}><X size={14}/></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="form-actions" style={{ marginTop: '16px' }}>
@@ -205,6 +228,10 @@ export default function ResearchGroups() {
               <button className="modal-close" onClick={() => setShowDetail(null)}><X size={20} /></button>
             </div>
             <div style={{ display: 'grid', gap: '16px' }}>
+              <div>
+                <strong style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>FACULTY</strong>
+                <p>{showDetail.faculty || '-'}</p>
+              </div>
               <div>
                 <strong style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>DEPARTMENT</strong>
                 <p>{showDetail.department || '-'}</p>
@@ -227,14 +254,14 @@ export default function ResearchGroups() {
                 </div>
               </div>
               <div>
-                <strong style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>MEMBERS ({showDetail.members?.length || 0})</strong>
+                <strong style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>STUDENT MEMBERS ({showDetail.members?.length || 0})</strong>
                 <div style={{ marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  {(showDetail.members || []).map(m => (
-                    <div key={m._id} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <div className="sidebar-avatar" style={{ width: '28px', height: '28px', fontSize: '0.7rem' }}>{m.name?.charAt(0)}</div>
+                  {(showDetail.members || []).map((m, idx) => (
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div className="sidebar-avatar" style={{ width: '28px', height: '28px', fontSize: '0.7rem' }}>{m.studentName?.charAt(0) || 'S'}</div>
                       <div>
-                        <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>{m.name}</div>
-                        <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{m.department || m.role}</div>
+                        <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>{m.studentName} ({m.studentId})</div>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{m.faculty || '-'} / {m.department || '-'} / {m.className || '-'}</div>
                       </div>
                     </div>
                   ))}
@@ -252,7 +279,7 @@ export default function ResearchGroups() {
                 </div>
               )}
             </div>
-            {user?.role === 'admin' && (
+            {user?.role === 'director' && (
               <div className="form-actions" style={{ marginTop: '20px' }}>
                 <button className="btn btn-danger" onClick={() => { handleDelete(showDetail._id); setShowDetail(null); }}>Delete Group</button>
               </div>

@@ -55,7 +55,7 @@ exports.updateGrant = async (req, res, next) => {
     const grant = await Grant.findById(req.params.id);
     if (!grant) return res.status(404).json({ message: 'Grant not found' });
     const isOwner = grant.applicant.toString() === req.user._id.toString();
-    if (!isOwner && req.user.role !== 'admin') return res.status(403).json({ message: 'Not authorized' });
+    if (!isOwner && req.user.role !== 'director') return res.status(403).json({ message: 'Not authorized' });
     const allowed = ['title', 'description', 'type', 'fundingSource', 'fundingAgency', 'amount',
       'startDate', 'endDate', 'coInvestigators', 'project', 'department', 'budgetBreakdown', 'compliance'];
     allowed.forEach(f => { if (req.body[f] !== undefined) grant[f] = req.body[f]; });
@@ -98,7 +98,7 @@ exports.deleteGrant = async (req, res, next) => {
     const grant = await Grant.findById(req.params.id);
     if (!grant) return res.status(404).json({ message: 'Grant not found' });
     const isOwner = grant.applicant.toString() === req.user._id.toString();
-    if (!isOwner && req.user.role !== 'admin') return res.status(403).json({ message: 'Not authorized' });
+    if (!isOwner && req.user.role !== 'director') return res.status(403).json({ message: 'Not authorized' });
     await grant.deleteOne();
     res.json({ message: 'Grant deleted' });
   } catch (err) { next(err); }

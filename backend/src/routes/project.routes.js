@@ -5,8 +5,8 @@ const { getProjects, getProject, updateProject, toggleMilestone, deleteProject }
 router.use(protect);
 router.get('/', getProjects);
 router.get('/:id', getProject);
-router.patch('/:id', authorize('admin', 'coordinator'), updateProject);
+router.patch('/:id', authorize('director', 'coordinator'), updateProject);
 router.patch('/:id/milestone/:milestoneId', toggleMilestone);
-router.delete('/:id', authorize('admin'), deleteProject);
+router.delete('/:id', authorize('director'), deleteProject);
 
 module.exports = router;

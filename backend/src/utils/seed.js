@@ -28,7 +28,7 @@ const seed = async () => {
   ]);
 
   // Users (password = Password123)
-  const admin = await User.create({ name: 'Dr. Admin', email: 'admin@rms.edu', password: 'Password123', role: 'admin', status: 'active', department: 'CS', rank: 'Professor' });
+  const admin = await User.create({ name: 'Dr. Admin', email: 'admin@rms.edu', password: 'Password123', role: 'director', status: 'active', department: 'CS', rank: 'Professor' });
   const coordinator = await User.create({ name: 'Dr. Sarah Chen', email: 'coordinator@rms.edu', password: 'Password123', role: 'coordinator', status: 'active', department: 'CS', rank: 'Associate Professor' });
   const finance = await User.create({ name: 'Mr. James Okafor', email: 'finance@rms.edu', password: 'Password123', role: 'finance', status: 'active', department: 'BME', rank: 'Finance Officer' });
   const researcher = await User.create({ name: 'Dr. Aisha Musa', email: 'researcher@rms.edu', password: 'Password123', role: 'researcher', status: 'active', department: 'ENV', rank: 'Lecturer' });

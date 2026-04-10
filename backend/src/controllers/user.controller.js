@@ -87,7 +87,7 @@ exports.rejectUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   try {
     const { name, department, rank, phone, bio, role, status, researchInterests, specialization, orcid, googleScholarId } = req.body;
-    const isAdmin = req.user.role === 'admin';
+    const isAdmin = req.user.role === 'director';
     const isSelf = req.user._id.toString() === req.params.id;
     
     if (!isAdmin && !isSelf) return res.status(403).json({ message: 'Not authorized' });
@@ -96,7 +96,7 @@ exports.updateUser = async (req, res, next) => {
     
     // Safety: Prevent admin self-lockout
     if (isAdmin && role) {
-      if (isSelf && role !== 'admin') {
+      if (isSelf && role !== 'director') {
         return res.status(400).json({ message: 'System Safeguard: You cannot change your own Administrator role.' });
       }
       updates.role = role;
@@ -121,7 +121,7 @@ exports.updateUser = async (req, res, next) => {
 // DELETE /api/users/:id
 exports.deleteUser = async (req, res, next) => {
   try {
-    const isAdmin = req.user.role === 'admin';
+    const isAdmin = req.user.role === 'director';
     const isSelf = req.user._id.toString() === req.params.id;
 
     if (!isAdmin) return res.status(403).json({ message: 'Only administrators can delete accounts.' });

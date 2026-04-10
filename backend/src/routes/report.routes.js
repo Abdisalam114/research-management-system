@@ -5,8 +5,8 @@ const { getPublicationsReport, getProjectsReport, getGrantsReport, getBudgetUtil
 router.use(protect);
 router.get('/publications', getPublicationsReport);
 router.get('/projects', getProjectsReport);
-router.get('/grants', authorize('admin', 'coordinator', 'finance'), getGrantsReport);
-router.get('/budget-utilization', authorize('admin', 'finance'), getBudgetUtilizationReport);
-router.get('/faculty-productivity', authorize('admin', 'coordinator'), getFacultyProductivityReport);
+router.get('/grants', authorize('director', 'coordinator', 'finance'), getGrantsReport);
+router.get('/budget-utilization', authorize('director', 'finance'), getBudgetUtilizationReport);
+router.get('/faculty-productivity', authorize('director', 'coordinator'), getFacultyProductivityReport);
 
 module.exports = router;

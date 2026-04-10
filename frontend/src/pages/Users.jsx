@@ -94,8 +94,7 @@ export default function Users() {
   };
 
   const getRoleBadge = (role) => {
-    if (role === 'student') return <span className="badge badge-student">STUDENT</span>;
-    if (role === 'admin') return <span className="badge badge-admin">DIRECTOR</span>;
+    if (role === 'director') return <span className="badge badge-admin">DIRECTOR</span>;
     if (role === 'coordinator') return <span className="badge badge-coordinator">ASSIST DIRECTOR</span>;
     return <span className={`badge badge-${role}`}>{(role || '').toUpperCase()}</span>;
   };
@@ -148,10 +147,9 @@ export default function Users() {
                   <label className="form-label">Role</label>
                   <select className="form-select" value={newUser.role} onChange={e => setNewUser({...newUser, role: e.target.value})}>
                     <option value="researcher">RESEARCHER</option>
-                    <option value="student">STUDENT</option>
                     <option value="coordinator">ASSIST DIRECTOR</option>
                     <option value="finance">FINANCE</option>
-                    <option value="admin">DIRECTOR</option>
+                    <option value="director">DIRECTOR</option>
                   </select>
                 </div>
                 <div className="form-group">
@@ -239,11 +237,11 @@ export default function Users() {
                         {isEditing ? (
                           <input 
                             className="form-input form-input-sm" 
-                            disabled={['admin', 'coordinator', 'finance'].includes(editValues.role)}
-                            value={['admin', 'coordinator', 'finance'].includes(editValues.role) ? 'N/A' : editValues.department} 
+                            disabled={['director', 'coordinator', 'finance'].includes(editValues.role)}
+                            value={['director', 'coordinator', 'finance'].includes(editValues.role) ? 'N/A' : editValues.department} 
                             onChange={(e) => setEditValues({ ...editValues, department: e.target.value })}
                           />
-                        ) : ['admin', 'coordinator', 'finance'].includes(u.role) ? 'N/A' : (u.department || '-')}
+                        ) : ['director', 'coordinator', 'finance'].includes(u.role) ? 'N/A' : (u.department || '-')}
                       </td>
                       <td>
                         {isEditing ? (
@@ -264,10 +262,9 @@ export default function Users() {
                             onChange={(e) => setEditValues({ ...editValues, role: e.target.value })}
                           >
                             <option value="researcher">RESEARCHER</option>
-                            <option value="student">STUDENT</option>
                             <option value="coordinator">ASSIST DIRECTOR</option>
                             <option value="finance">FINANCE</option>
-                            <option value="admin">DIRECTOR</option>
+                            <option value="director">DIRECTOR</option>
                           </select>
                         ) : getRoleBadge(u.role)}
                       </td>
@@ -297,7 +294,7 @@ export default function Users() {
                           ) : (
                             <>
                               <button className="btn btn-sm btn-secondary" onClick={() => startEdit(u)}>Edit</button>
-                              {u._id !== currentUser?._id && currentUser?.role === 'admin' && (
+                              {u._id !== currentUser?._id && currentUser?.role === 'director' && (
                                 <button className="btn btn-sm btn-danger" onClick={() => handleDelete(u._id)}>Delete</button>
                               )}
                               {u.status === 'pending' && (

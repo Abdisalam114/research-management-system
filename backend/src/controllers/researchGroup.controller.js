@@ -9,7 +9,6 @@ exports.getGroups = async (req, res, next) => {
     if (department) filter.department = department;
     const groups = await ResearchGroup.find(filter)
       .populate('leader', 'name email department')
-      .populate('members', 'name email department')
       .populate('projects', 'title status')
       .sort({ createdAt: -1 });
     res.json(groups);
@@ -21,7 +20,6 @@ exports.getGroup = async (req, res, next) => {
   try {
     const group = await ResearchGroup.findById(req.params.id)
       .populate('leader', 'name email department')
-      .populate('members', 'name email department role')
       .populate('projects', 'title status progress')
       .populate('publications', 'title type status year')
       .populate('createdBy', 'name');
@@ -53,8 +51,7 @@ exports.updateGroup = async (req, res, next) => {
     const updates = {};
     allowed.forEach(f => { if (req.body[f] !== undefined) updates[f] = req.body[f]; });
     const group = await ResearchGroup.findByIdAndUpdate(req.params.id, updates, { new: true })
-      .populate('leader', 'name email')
-      .populate('members', 'name email');
+      .populate('leader', 'name email');
     if (!group) return res.status(404).json({ message: 'Research group not found' });
     res.json(group);
   } catch (err) { next(err); }

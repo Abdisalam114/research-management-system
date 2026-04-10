@@ -58,7 +58,7 @@ exports.updateProposal = async (req, res, next) => {
     const proposal = await Proposal.findById(req.params.id);
     if (!proposal) return res.status(404).json({ message: 'Proposal not found' });
     const isOwner = proposal.submittedBy.toString() === req.user._id.toString();
-    if (!isOwner && req.user.role !== 'admin') return res.status(403).json({ message: 'Not authorized' });
+    if (!isOwner && req.user.role !== 'director') return res.status(403).json({ message: 'Not authorized' });
     if (!['draft', 'rejected', 'revision_requested'].includes(proposal.status)) return res.status(400).json({ message: 'Proposal cannot be edited in current status' });
     
     const allowed = ['title', 'abstract', 'keywords', 'researchers', 'estimatedBudget', 'duration', 'department', 'documents'];
@@ -206,7 +206,7 @@ exports.deleteProposal = async (req, res, next) => {
     const proposal = await Proposal.findById(req.params.id);
     if (!proposal) return res.status(404).json({ message: 'Proposal not found' });
     const isOwner = proposal.submittedBy.toString() === req.user._id.toString();
-    if (!isOwner && req.user.role !== 'admin') return res.status(403).json({ message: 'Not authorized' });
+    if (!isOwner && req.user.role !== 'director') return res.status(403).json({ message: 'Not authorized' });
     await proposal.deleteOne();
     res.json({ message: 'Proposal deleted' });
   } catch (err) { next(err); }

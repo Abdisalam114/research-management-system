@@ -7,7 +7,7 @@ router.get('/', getGrants);
 router.get('/:id', getGrant);
 router.post('/', createGrant);
 router.patch('/:id', updateGrant);
-router.patch('/:id/review', authorize('admin'), reviewGrant);
+router.patch('/:id/review', authorize('director'), reviewGrant);
 router.delete('/:id', deleteGrant);
 
 module.exports = router;

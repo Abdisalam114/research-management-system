@@ -8,49 +8,63 @@ A comprehensive, full-stack web application custom-built for university environm
 
 The platform is strictly role-based and implements an integrated 8-module approach:
 
-### 1. Unified Dashboard
-- Visual KPIs displaying running projects, pending proposals, active grants, and total citations.
-- Role-scoped charting (Recharts) dynamically rendering grant success rates, publication growth over time, and budget utilization.
-- Real-time recent activity action feed.
+### 1. Research Proposal Management
+- Proposal submission
+- Ethics approval workflow
+- Proposal review
+- Version control
+- Proposal status tracking
 
-### 2. Multi-Stage Proposal Workflow
-- Submit research proposals and define estimated budgets.
-- Automated multi-step review pipeline: `Draft` → `Submitted` → `Under Review` → `Revision Requested` → `Approved / Rejected`.
-- Integrated ethics approval tags and version tracking.
+### 2. Research Project Management
+- Approved project registry
+- Project timeline tracking
+- Milestones monitoring
+- Research team management
 
-### 3. Project & Milestone Tracking
-- Automatically generates active projects from approved proposals.
-- Track overall completion progress (0-100%).
-- Add strict, date-bound research milestones and track actionable deliverables. 
+### 3. Grant & Funding Management
+- Grant application
+- Budget planning
+- Funding source tracking
+- Grant compliance
 
-### 4. Publication Repository
-- Centralized tracking for journals, conferences, book chapters, and patents.
-- Admin-level verification system for newly submitted publications.
-- Automated aggregated citation counting.
+### 4. Publication & Output Tracking
+- Journal articles
+- Conference papers
+- Books / book chapters
+- Patents
+- Community research impact
 
-### 5. Grants & Budget Finance Modeling
-- Dedicated module for Finance officers to approve external research grants.
-- Record precise line-item expenses against approved grant budgets.
-- Live-calculated remaining balance indicators.
+### 5. Research Repository
+- Store: proposals, datasets, publications, theses
+- Integration with institutional repository
 
-### 6. Interdisciplinary Research Groups
-- Form collaborative interdisciplinary teams across university departments.
-- Group activity tracing and automated team communication mapping.
+### 6. Finance & Budget Tracking
+- Research budget allocation
+- Expense tracking
+- Financial reports
+- Procurement for research
 
-### 7. Automated Analytics & Reporting
-- 5 Distinct Report Pipelines: Publications, Active Projects, Grant Financials, Budget Utilization, and Faculty Productivity.
-- Inline generated table-previews.
-- Automated one-click CSV Export functionality for university recordkeeping.
+### 7. Research Analytics & Reporting
+- Publications per faculty
+- Research productivity
+- Citation metrics
+- Grant success rate
+- Annual research reports
 
-### 8. User Management & Registration Approvals
-- Built-in multi-layered Role-Based Access Control (RBAC).
-- Silent verification: users securely register and sit in a `Pending` queue until evaluated.
-- **5 Core Access Roles**: 
-  - **Director** *(Admin - Unrestricted)*
-  - **Assist Director** *(Coordinator - Academic Approval)*
-  - **Finance** *(Grant tracking and Budgets)*
-  - **Researcher** *(Faculty Members)*
-  - **Student** *(Final Year Undergraduates / Post-Graduates)*
+### 8. Collaboration & Communication
+- Inter-faculty collaboration
+- Research groups
+- Notifications
+- Messaging system
+
+---
+
+### 👥 User Roles & Access
+
+- **Research Director:** Oversees all research activities, creates strategic priorities, manages funding oversight, and generates institutional reports.
+- **Faculty Research Coordinator:** Validates publications, pre-reviews faculty proposals, and coordinates research activities per department.
+- **Finance Officer:** Manages budgets, grant financial tracking, handles payment workflows, and monitors compliance.
+- **Researcher:** Faculty and post-graduate students capable of applying for grants, publishing datasets, tracking profile impact, and managing timelines.
 
 ### 🛡️ System Security & Safeguards
 To ensure robust institutional management and prevent accidental lockouts, the system includes:

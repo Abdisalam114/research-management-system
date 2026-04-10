@@ -7,10 +7,10 @@ router.get('/', getProposals);
 router.get('/:id', getProposal);
 router.post('/', createProposal);
 router.patch('/:id', updateProposal);
-router.patch('/:id/assign-reviewer', authorize('admin'), assignReviewer);
+router.patch('/:id/assign-reviewer', authorize('director'), assignReviewer);
 router.patch('/:id/review', authorize('coordinator'), reviewProposal);
-router.patch('/:id/ethics', authorize('admin'), updateEthics);
-router.patch('/:id/decision', authorize('admin'), decideProposal);
+router.patch('/:id/ethics', authorize('director'), updateEthics);
+router.patch('/:id/decision', authorize('director'), decideProposal);
 router.delete('/:id', deleteProposal);
 
 module.exports = router;

@@ -96,8 +96,9 @@ export default function Register() {
             <label className="form-label">Role</label>
             <select name="role" className="form-select" value={formData.role || ''} onChange={handleChange} required>
               <option value="">Select Role...</option>
+              <option value="coordinator">Faculty Research Coordinator</option>
+              <option value="finance">Finance Officer</option>
               <option value="researcher">Researcher</option>
-              <option value="student">Student</option>
             </select>
           </div>
 
