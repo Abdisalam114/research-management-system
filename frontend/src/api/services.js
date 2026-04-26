@@ -100,10 +100,10 @@ export const conversationsAPI = {
 };
 
 export const reportsAPI = {
-  publications: (params) => api.get('/reports/publications', { params, responseType: params?.format === 'csv' ? 'blob' : 'json' }),
-  projects: (params) => api.get('/reports/projects', { params, responseType: params?.format === 'csv' ? 'blob' : 'json' }),
-  grants: (params) => api.get('/reports/grants', { params, responseType: params?.format === 'csv' ? 'blob' : 'json' }),
-  budgetUtilization: (params) => api.get('/reports/budget-utilization', { params, responseType: params?.format === 'csv' ? 'blob' : 'json' }),
-  facultyProductivity: (params) => api.get('/reports/faculty-productivity', { params, responseType: params?.format === 'csv' ? 'blob' : 'json' }),
+  publications: (params) => api.get('/reports/publications', { params }),
+  projects: (params) => api.get('/reports/projects', { params }),
+  grants: (params) => api.get('/reports/grants', { params }),
+  budgetUtilization: (params) => api.get('/reports/budget-utilization', { params }),
+  facultyProductivity: (params) => api.get('/reports/faculty-productivity', { params }),
 };
 

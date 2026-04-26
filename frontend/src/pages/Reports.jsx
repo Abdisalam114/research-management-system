@@ -3,6 +3,9 @@ import { useAuth } from '../context/AuthContext';
 import { PieChart, Download, FileText, Briefcase, DollarSign, Users, Award } from 'lucide-react';
 import { reportsAPI } from '../api/services';
 import toast, { Toaster } from 'react-hot-toast';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
+import * as XLSX from 'xlsx';
 
 export default function Reports() {
   const { user } = useAuth();
@@ -10,8 +13,8 @@ export default function Reports() {
   const [reportData, setReportData] = useState([]);
   const [loadingReport, setLoadingReport] = useState(false);
 
-  const handleDownload = async (type) => {
-    const toastId = toast.loading(`Generating ${type} report...`);
+  const handleDownload = async (type, format = 'csv') => {
+    const toastId = toast.loading(`Generating ${format.toUpperCase()} report...`);
     try {
       const apiMap = {
         publications: reportsAPI.publications,
@@ -20,25 +23,72 @@ export default function Reports() {
         'budget-utilization': reportsAPI.budgetUtilization,
         'faculty-productivity': reportsAPI.facultyProductivity,
       };
+      
       const apiCall = apiMap[type];
       if (!apiCall) throw new Error('Unknown report type');
-      const res = await apiCall({ format: 'csv' });
+
+      // For PDF/Excel, we fetch JSON data first and generate on frontend
+      // For CSV, we can still fetch as blob or generate from JSON
+      const res = await apiCall({ format: 'json' });
+      const data = res.data;
       
-      // With responseType: 'blob', res.data is the blob
-      const blob = res.data;
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${type}_report_${new Date().toISOString().split('T')[0]}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      if (!data || data.length === 0) {
+        throw new Error('No data found for this report');
+      }
+
+      const filename = `${type}_report_${new Date().toISOString().split('T')[0]}`;
+
+      if (format === 'pdf') {
+        const doc = new jsPDF('l', 'pt', 'a4');
+        const title = type.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Report';
+        
+        doc.setFontSize(20);
+        doc.text(title, 40, 40);
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, 40, 60);
+
+        const headers = Object.keys(data[0]).map(k => k.replace(/([A-Z])/g, ' $1').toUpperCase());
+        const rows = data.map(obj => Object.values(obj));
+
+        doc.autoTable({
+          startY: 80,
+          head: [headers],
+          body: rows,
+          styles: { fontSize: 8, cellPadding: 5 },
+          headStyles: { fillColor: [14, 165, 233], textColor: 255 },
+          alternateRowStyles: { fillColor: [245, 247, 250] },
+        });
+
+        doc.save(`${filename}.pdf`);
+      } 
+      else if (format === 'excel') {
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
+        XLSX.writeFile(workbook, `${filename}.xlsx`);
+      }
+      else {
+        // CSV
+        const fields = Object.keys(data[0]);
+        const csv = [
+          fields.join(','),
+          ...data.map(row => fields.map(f => `"${(row[f] || '').toString().replace(/"/g, '""')}"`).join(','))
+        ].join('\n');
+        
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `${filename}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
       
-      toast.success(`Report downloaded successfully!`, { id: toastId });
+      toast.success(`${format.toUpperCase()} report downloaded!`, { id: toastId });
     } catch (err) {
       console.error(err);
-      toast.error(`Failed to generate ${type} report`, { id: toastId });
+      toast.error(err.message || `Failed to generate ${type} report`, { id: toastId });
     }
   };
 
@@ -117,12 +167,18 @@ export default function Reports() {
             <p style={{ color: 'var(--text-secondary)', marginBottom: '20px', fontSize: '0.85rem', lineHeight: 1.5 }}>
               {card.description}
             </p>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button className="btn btn-primary" onClick={() => handleDownload(card.id)} style={{ flex: 1, justifyContent: 'center' }}>
-                <Download size={14} /> Export CSV
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              <button className="btn btn-sm btn-primary" onClick={() => handleDownload(card.id, 'pdf')} style={{ flex: 1, justifyContent: 'center', background: '#e11d48' }}>
+                PDF
               </button>
-              <button className="btn btn-secondary" onClick={() => handlePreview(card.id)} style={{ flex: 1, justifyContent: 'center' }}>
-                <PieChart size={14} /> Preview
+              <button className="btn btn-sm btn-primary" onClick={() => handleDownload(card.id, 'excel')} style={{ flex: 1, justifyContent: 'center', background: '#16a34a' }}>
+                Excel
+              </button>
+              <button className="btn btn-sm btn-primary" onClick={() => handleDownload(card.id, 'csv')} style={{ flex: 1, justifyContent: 'center' }}>
+                CSV
+              </button>
+              <button className="btn btn-sm btn-secondary" onClick={() => handlePreview(card.id)} style={{ flex: '1 0 100%', justifyContent: 'center', marginTop: '4px' }}>
+                <PieChart size={14} /> Preview Data
               </button>
             </div>
           </div>
@@ -137,9 +193,9 @@ export default function Reports() {
               {reportCards.find(r => r.id === activeReport)?.title || 'Report'} — Preview
             </h3>
             <div style={{ display: 'flex', gap: '8px' }}>
-              <button className="btn btn-sm btn-primary" onClick={() => handleDownload(activeReport)}>
-                <Download size={14} /> Export
-              </button>
+              <button className="btn btn-sm btn-primary" onClick={() => handleDownload(activeReport, 'pdf')} style={{ background: '#e11d48' }}>PDF</button>
+              <button className="btn btn-sm btn-primary" onClick={() => handleDownload(activeReport, 'excel')} style={{ background: '#16a34a' }}>Excel</button>
+              <button className="btn btn-sm btn-primary" onClick={() => handleDownload(activeReport, 'csv')}>CSV</button>
               <button className="btn btn-sm btn-secondary" onClick={() => setActiveReport(null)}>Close</button>
             </div>
           </div>
