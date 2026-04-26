@@ -11,7 +11,7 @@ export default function Reports() {
   const [loadingReport, setLoadingReport] = useState(false);
 
   const handleDownload = async (type) => {
-    toast.loading(`Generating ${type} report...`, { id: 'report' });
+    const toastId = toast.loading(`Generating ${type} report...`);
     try {
       const apiMap = {
         publications: reportsAPI.publications,
@@ -23,17 +23,22 @@ export default function Reports() {
       const apiCall = apiMap[type];
       if (!apiCall) throw new Error('Unknown report type');
       const res = await apiCall({ format: 'csv' });
-      if (!res.data) throw new Error('No data received');
-      const blob = new Blob([res.data], { type: 'text/csv' });
+      
+      // With responseType: 'blob', res.data is the blob
+      const blob = res.data;
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `${type}_report_${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      toast.success(`Report generated!`, { id: 'report' });
+      
+      toast.success(`Report downloaded successfully!`, { id: toastId });
     } catch (err) {
-      toast.error(`Failed to generate ${type} report`, { id: 'report' });
+      console.error(err);
+      toast.error(`Failed to generate ${type} report`, { id: toastId });
     }
   };
 
