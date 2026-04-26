@@ -127,27 +127,29 @@ export default function Users() {
         </button>
       </div>
 
-      <div className="card" style={{ marginBottom: '24px', borderLeft: '4px solid var(--accent)' }}>
-        <h4 style={{ margin: '0 0 12px 0', fontSize: '0.9rem' }}>Role Definitions & Responsibilities</h4>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-          <div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>RESEARCH DIRECTOR</div>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Strategic oversight, policy creation, final approval/rejection of proposals, and institutional reporting.</p>
-          </div>
-          <div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--success)', marginBottom: '4px' }}>FACULTY RESEARCH COORDINATOR</div>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Pre-review of proposals within their faculty and validation of publications before they enter the repository.</p>
-          </div>
-          <div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--warning)', marginBottom: '4px' }}>FINANCE OFFICER</div>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Oversight of grant usage, financial statement generation, and approval of research-related expenses.</p>
-          </div>
-          <div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>RESEARCHER</div>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Ability to submit proposals, manage project timelines, upload progress reports, and maintain personal research profile.</p>
+      {currentUser?.role === 'director' && (
+        <div className="card" style={{ marginBottom: '24px', borderLeft: '4px solid var(--accent)' }}>
+          <h4 style={{ margin: '0 0 12px 0', fontSize: '0.9rem' }}>Role Definitions & Responsibilities</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>RESEARCH DIRECTOR</div>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Strategic oversight, policy creation, final approval/rejection of proposals, and institutional reporting.</p>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--success)', marginBottom: '4px' }}>FACULTY RESEARCH COORDINATOR</div>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Pre-review of proposals within their faculty and validation of publications before they enter the repository.</p>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--warning)', marginBottom: '4px' }}>FINANCE OFFICER</div>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Oversight of grant usage, financial statement generation, and approval of research-related expenses.</p>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>RESEARCHER</div>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Ability to submit proposals, manage project timelines, upload progress reports, and maintain personal research profile.</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {showAddModal && (
         <div className="modal-backdrop">

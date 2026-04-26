@@ -98,7 +98,7 @@ export default function Dashboard() {
       <div className="page-header">
         <h1 className="page-title">Welcome back, {user?.name}</h1>
         <p className="page-subtitle" style={{ maxWidth: '800px' }}>
-          <strong style={{ color: 'var(--accent)' }}>{getRoleGreeting()}:</strong> {getRoleDescription()}
+          <strong style={{ color: 'var(--accent)' }}>{getRoleGreeting()}:</strong> {user?.role === 'director' ? getRoleDescription() : 'Overview of research management metrics.'}
         </p>
       </div>
 
