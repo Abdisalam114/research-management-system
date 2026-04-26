@@ -83,11 +83,23 @@ export default function Dashboard() {
 
   const kpiCards = getKpiCards();
 
+  const getRoleDescription = () => {
+    const desc = {
+      director: 'Strategic oversight, policy creation, final approval/rejection of proposals, and institutional reporting.',
+      coordinator: 'Pre-review of proposals within your faculty and validation of publications before repository entry.',
+      finance: 'Oversight of grant usage, financial statement generation, and approval of research-related expenses.',
+      researcher: 'Submit proposals, manage project timelines, upload progress reports, and maintain your research profile.'
+    };
+    return desc[user?.role] || 'Overview of research management metrics.';
+  };
+
   return (
     <div style={{ padding: '24px' }}>
       <div className="page-header">
         <h1 className="page-title">Welcome back, {user?.name}</h1>
-        <p className="page-subtitle">{getRoleGreeting()} Dashboard — Overview of research management metrics.</p>
+        <p className="page-subtitle" style={{ maxWidth: '800px' }}>
+          <strong style={{ color: 'var(--accent)' }}>{getRoleGreeting()}:</strong> {getRoleDescription()}
+        </p>
       </div>
 
       <div className="stats-grid">

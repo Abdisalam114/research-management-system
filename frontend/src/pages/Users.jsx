@@ -94,8 +94,9 @@ export default function Users() {
   };
 
   const getRoleBadge = (role) => {
-    if (role === 'director') return <span className="badge badge-admin">DIRECTOR</span>;
-    if (role === 'coordinator') return <span className="badge badge-coordinator">ASSIST DIRECTOR</span>;
+    if (role === 'director') return <span className="badge badge-admin">RESEARCH DIRECTOR</span>;
+    if (role === 'coordinator') return <span className="badge badge-coordinator">FACULTY COORDINATOR</span>;
+    if (role === 'finance') return <span className="badge badge-finance">FINANCE OFFICER</span>;
     return <span className={`badge badge-${role}`}>{(role || '').toUpperCase()}</span>;
   };
   
@@ -126,6 +127,28 @@ export default function Users() {
         </button>
       </div>
 
+      <div className="card" style={{ marginBottom: '24px', borderLeft: '4px solid var(--accent)' }}>
+        <h4 style={{ margin: '0 0 12px 0', fontSize: '0.9rem' }}>Role Definitions & Responsibilities</h4>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>RESEARCH DIRECTOR</div>
+            <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Strategic oversight, policy creation, final approval/rejection of proposals, and institutional reporting.</p>
+          </div>
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--success)', marginBottom: '4px' }}>FACULTY RESEARCH COORDINATOR</div>
+            <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Pre-review of proposals within their faculty and validation of publications before they enter the repository.</p>
+          </div>
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--warning)', marginBottom: '4px' }}>FINANCE OFFICER</div>
+            <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Oversight of grant usage, financial statement generation, and approval of research-related expenses.</p>
+          </div>
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>RESEARCHER</div>
+            <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', margin: 0 }}>Ability to submit proposals, manage project timelines, upload progress reports, and maintain personal research profile.</p>
+          </div>
+        </div>
+      </div>
+
       {showAddModal && (
         <div className="modal-backdrop">
           <div className="card modal-content" style={{ width: '100%', maxWidth: '500px' }}>
@@ -147,9 +170,9 @@ export default function Users() {
                   <label className="form-label">Role</label>
                   <select className="form-select" value={newUser.role} onChange={e => setNewUser({...newUser, role: e.target.value})}>
                     <option value="researcher">RESEARCHER</option>
-                    <option value="coordinator">ASSIST DIRECTOR</option>
-                    <option value="finance">FINANCE</option>
-                    <option value="director">DIRECTOR</option>
+                    <option value="coordinator">FACULTY RESEARCH COORDINATOR</option>
+                    <option value="finance">FINANCE OFFICER</option>
+                    <option value="director">RESEARCH DIRECTOR</option>
                   </select>
                 </div>
                 <div className="form-group">
@@ -261,11 +284,11 @@ export default function Users() {
                             value={editValues.role}
                             onChange={(e) => setEditValues({ ...editValues, role: e.target.value })}
                           >
-                            <option value="researcher">RESEARCHER</option>
-                            <option value="coordinator">ASSIST DIRECTOR</option>
-                            <option value="finance">FINANCE</option>
-                            <option value="director">DIRECTOR</option>
-                          </select>
+                             <option value="researcher">RESEARCHER</option>
+                             <option value="coordinator">FACULTY COORDINATOR</option>
+                             <option value="finance">FINANCE OFFICER</option>
+                             <option value="director">RESEARCH DIRECTOR</option>
+                           </select>
                         ) : getRoleBadge(u.role)}
                       </td>
                       <td>
