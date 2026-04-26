@@ -3,8 +3,8 @@ import { useAuth } from '../context/AuthContext';
 import { PieChart, Download, FileText, Briefcase, DollarSign, Users, Award } from 'lucide-react';
 import { reportsAPI } from '../api/services';
 import toast, { Toaster } from 'react-hot-toast';
-import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 
 export default function Reports() {
@@ -50,7 +50,7 @@ export default function Reports() {
         const headers = Object.keys(data[0]).map(k => k.replace(/([A-Z])/g, ' $1').toUpperCase());
         const rows = data.map(obj => Object.values(obj));
 
-        doc.autoTable({
+        autoTable(doc, {
           startY: 80,
           head: [headers],
           body: rows,
@@ -216,9 +216,15 @@ export default function Reports() {
                 <tbody>
                   {reportData.slice(0, 50).map((row, i) => (
                     <tr key={i}>
-                      {Object.values(row).map((val, j) => (
-                        <td key={j} style={{ fontSize: '0.82rem' }}>{val?.toString() || '-'}</td>
-                      ))}
+                      {Object.keys(reportData[0] || {}).map((key, j) => {
+                        const val = row[key];
+                        return (
+                          <td key={j} style={{ fontSize: '0.82rem' }}>
+                            {val === null || val === undefined ? '-' : 
+                             (typeof val === 'object' ? JSON.stringify(val) : val.toString())}
+                          </td>
+                        );
+                      })}
                     </tr>
                   ))}
                 </tbody>
