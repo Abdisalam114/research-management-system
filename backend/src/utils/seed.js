@@ -40,11 +40,17 @@ const seed = async () => {
   const finance = await User.create({ name: 'Mr. James Okafor', email: 'finance@rms.edu', password: 'Password123', role: 'finance', status: 'active', department: 'BME', rank: 'Finance Officer' });
   const researcher = await User.create({ name: 'Dr. Aisha Musa', email: 'researcher@rms.edu', password: 'Password123', role: 'researcher', status: 'active', department: 'ENV', rank: 'Lecturer' });
   
+  const researcherNames = [
+    'Dr. Ahmed Yusuf', 'Dr. Fatimah Ali', 'Dr. John Smith', 
+    'Dr. Elena Rodriguez', 'Dr. Kenji Tanaka', 'Dr. Sarah Wilson', 
+    'Dr. Mohamed Hassan', 'Dr. Linda Chen', 'Dr. Robert Brown', 'Dr. Maria Garcia'
+  ];
+  
   const researchers = [researcher];
-  for(let i=1; i<=10; i++) {
+  for(let i=0; i<researcherNames.length; i++) {
     const r = await User.create({ 
-      name: `Researcher ${i}`, 
-      email: `researcher${i}@rms.edu`, 
+      name: researcherNames[i], 
+      email: `researcher${i+1}@rms.edu`, 
       password: 'Password123', 
       role: 'researcher', 
       status: 'active', 
