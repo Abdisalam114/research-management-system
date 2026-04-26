@@ -93,6 +93,7 @@ export default function Reports() {
   };
 
   const handlePreview = async (type) => {
+    setReportData([]);
     setLoadingReport(true);
     setActiveReport(type);
     try {
@@ -104,8 +105,10 @@ export default function Reports() {
         'faculty-productivity': reportsAPI.facultyProductivity,
       };
       const res = await apiMap[type]({});
-      setReportData(res.data);
+      console.log(`Report Data for ${type}:`, res.data);
+      setReportData(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
+      console.error(err);
       toast.error('Failed to load report data');
       setReportData([]);
     } finally {
