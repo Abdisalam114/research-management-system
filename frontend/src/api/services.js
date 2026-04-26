@@ -95,7 +95,7 @@ export const conversationsAPI = {
   getAll: () => api.get('/conversations'),
   getOne: (id) => api.get(`/conversations/${id}`),
   create: (data) => api.post('/conversations', data),
-  sendMessage: (id, data) => api.post(`/conversations/${id}/messages', data),
+  sendMessage: (id, data) => api.post(`/conversations/${id}/messages`, data),
   markRead: (id) => api.patch(`/conversations/${id}/read`),
 };
 
