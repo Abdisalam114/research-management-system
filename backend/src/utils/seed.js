@@ -8,6 +8,7 @@ const Budget = require('../models/budget.model');
 const Department = require('../models/department.model');
 const Repository = require('../models/repository.model');
 const Conversation = require('../models/conversation.model');
+const Grant = require('../models/grant.model');
 
 const randomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -21,7 +22,7 @@ const seed = async () => {
   await Promise.all([
     User.deleteMany(), Proposal.deleteMany(), Project.deleteMany(), 
     Publication.deleteMany(), Budget.deleteMany(), Department.deleteMany(),
-    Repository.deleteMany(), Conversation.deleteMany()
+    Repository.deleteMany(), Conversation.deleteMany(), Grant.deleteMany()
   ]);
 
   // Departments
@@ -154,6 +155,44 @@ const seed = async () => {
       status: 'published',
       submittedBy: coordinator._id,
       plagiarismCheck: { status: 'passed', score: 8, checkedAt: new Date() }
+    }
+  ]);
+
+  // Seed some Grants
+  console.log('💰 Seeding Grants...');
+  await Grant.create([
+    {
+      title: 'National Science Foundation - AI Research Grant',
+      source: 'National Science Foundation (NSF)',
+      amount: 500000,
+      status: 'active',
+      startDate: new Date(2024, 0, 1),
+      endDate: new Date(2026, 11, 31),
+      applicant: researchers[0]._id,
+      department: 'CS',
+      description: 'Major grant for exploring generative AI in education.'
+    },
+    {
+      title: 'University Internal Seed Funding 2025',
+      source: 'Institutional Research Fund',
+      amount: 25000,
+      status: 'approved',
+      startDate: new Date(2025, 2, 1),
+      endDate: new Date(2026, 1, 28),
+      applicant: researchers[1]._id,
+      department: 'BME',
+      description: 'Seed funding for preliminary biomedical sensors study.'
+    },
+    {
+      title: 'Green Energy Initiative 2024',
+      source: 'Global Energy Council',
+      amount: 150000,
+      status: 'active',
+      startDate: new Date(2024, 5, 1),
+      endDate: new Date(2025, 10, 30),
+      applicant: researchers[2]._id,
+      department: 'ENV',
+      description: 'Collaboration grant for renewable energy transitions.'
     }
   ]);
 

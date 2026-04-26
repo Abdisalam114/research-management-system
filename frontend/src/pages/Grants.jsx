@@ -197,6 +197,13 @@ export default function Grants() {
                   <label className="form-label">Description</label>
                   <textarea className="form-textarea" value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={3} />
                 </div>
+                <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                  <label className="form-label">Staff Name Selection</label>
+                  <select className="form-input" value={form.applicant} onChange={e => setForm({...form, applicant: e.target.value})}>
+                    <option value="">Select Staff...</option>
+                    {researchers.map(r => <option key={r._id} value={r._id}>{r.name} ({r.department})</option>)}
+                  </select>
+                </div>
                 <div className="form-group">
                   <label className="form-label">Type</label>
                   <select className="form-input" value={form.type} onChange={e => setForm({...form, type: e.target.value})}>

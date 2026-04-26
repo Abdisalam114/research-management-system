@@ -248,7 +248,7 @@ export default function Proposals() {
                   </label>
                 </div>
                 <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-                  <label className="form-label">Co-Researchers</label>
+                  <label className="form-label">Co-Names</label>
                   <div style={{ maxHeight: '150px', overflowY: 'auto', border: '1px solid var(--border)', borderRadius: '8px', padding: '8px' }}>
                     {researchers.filter(r => r._id !== user?._id).map(r => (
                       <label key={r._id} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px', cursor: 'pointer', borderRadius: '4px', fontSize: '0.85rem' }}
@@ -300,7 +300,7 @@ export default function Proposals() {
               )}
               {showDetail.researchers?.length > 0 && (
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <strong style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>CO-RESEARCHERS</strong>
+                  <strong style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>CO-NAMES</strong>
                   <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px' }}>
                     {showDetail.researchers.map(r => <span key={r._id} className="badge badge-approved">{r.name}</span>)}
                   </div>

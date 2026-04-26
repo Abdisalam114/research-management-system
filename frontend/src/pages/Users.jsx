@@ -109,7 +109,7 @@ export default function Users() {
     const matchesSearch = u.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          u.email.toLowerCase().includes(searchTerm.toLowerCase());
     
-    if (activeTab === 'researchers') return matchesSearch && u.role === 'researcher';
+    if (activeTab === 'researchers') return matchesSearch && u.role === 'researcher'; // Filtering by staff name role
     if (activeTab === 'pending') return matchesSearch && u.status === 'pending';
     return matchesSearch;
   });
@@ -213,7 +213,7 @@ export default function Users() {
           </div>
           <div className="tabs" style={{ marginBottom: 0 }}>
             <button className={`tab ${activeTab === 'all' ? 'active' : ''}`} onClick={() => setActiveTab('all')}>All Users</button>
-            <button className={`tab ${activeTab === 'researchers' ? 'active' : ''}`} onClick={() => setActiveTab('researchers')}>Researchers</button>
+            <button className={`tab ${activeTab === 'researchers' ? 'active' : ''}`} onClick={() => setActiveTab('researchers')}>Staff Names</button>
             <button className={`tab ${activeTab === 'pending' ? 'active' : ''}`} onClick={() => setActiveTab('pending')}>Pending Approval</button>
           </div>
         </div>
