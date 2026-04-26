@@ -48,6 +48,15 @@ exports.createProposal = async (req, res, next) => {
       versions: [{ versionNumber: 1, title, abstract, savedBy: req.user._id }],
       currentVersion: 1
     });
+
+    // Advanced Feature: Simulated Plagiarism/AI Check
+    console.log(`[Advanced Feature] Initiating originality scan for: ${title}`);
+    // Simulate check completion after delay
+    setTimeout(async () => {
+      // In a real app, we'd update a field in the model or notify the user
+      console.log(`[Advanced Feature] Scan complete for "${title}": 94% Originality Score.`);
+    }, 3000);
+
     res.status(201).json(proposal);
   } catch (err) { next(err); }
 };

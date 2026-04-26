@@ -110,7 +110,7 @@ export default function Proposals() {
           <h1 className="page-title">Research Proposals</h1>
           <p className="page-subtitle">Submit, review, and track research proposals through the approval workflow.</p>
         </div>
-        {['researcher', 'admin'].includes(user?.role) && (
+        {['researcher', 'director'].includes(user?.role) && (
           <button className="btn btn-primary" onClick={() => setShowModal(true)}>
             <Plus size={16} /> New Proposal
           </button>
@@ -183,8 +183,8 @@ export default function Proposals() {
                             <button className="btn btn-sm btn-danger" onClick={() => handleReview(p._id, 'reject')} title="Reject"><XCircle size={14} /></button>
                           </>
                         )}
-                        {/* Admin/Director: decide on under_review proposals */}
-                        {user?.role === 'admin' && p.status === 'under_review' && (
+                        {/* Director: decide on under_review proposals */}
+                        {user?.role === 'director' && p.status === 'under_review' && (
                           <>
                             <button className="btn btn-sm btn-success" onClick={() => handleDecision(p._id, 'approve')} title="Approve"><Check size={14} /></button>
                             <button className="btn btn-sm btn-danger" onClick={() => handleDecision(p._id, 'reject')} title="Reject"><XCircle size={14} /></button>
@@ -194,7 +194,7 @@ export default function Proposals() {
                         {p.submittedBy?._id === user?._id && ['draft', 'revision_requested'].includes(p.status) && (
                           <button className="btn btn-sm btn-primary" onClick={() => handleSubmit(p._id)} title="Submit">Submit</button>
                         )}
-                        {(p.submittedBy?._id === user?._id || user?.role === 'admin') && ['draft'].includes(p.status) && (
+                        {(p.submittedBy?._id === user?._id || user?.role === 'director') && ['draft'].includes(p.status) && (
                           <button className="btn btn-sm btn-danger" onClick={() => handleDelete(p._id)} title="Delete"><X size={14} /></button>
                         )}
                       </div>
@@ -364,7 +364,7 @@ export default function Proposals() {
                   <button className="btn btn-danger" onClick={() => handleReview(showDetail._id, 'reject')}><XCircle size={14} /> Reject</button>
                 </>
               )}
-              {user?.role === 'admin' && showDetail.status === 'under_review' && (
+              {user?.role === 'director' && showDetail.status === 'under_review' && (
                 <>
                   <button className="btn btn-success" onClick={() => handleDecision(showDetail._id, 'approve')}><Check size={14} /> Approve</button>
                   <button className="btn btn-danger" onClick={() => handleDecision(showDetail._id, 'reject')}><XCircle size={14} /> Reject</button>

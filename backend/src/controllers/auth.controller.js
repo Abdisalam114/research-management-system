@@ -15,7 +15,7 @@ exports.register = async (req, res, next) => {
     const exists = await User.findOne({ email });
     if (exists) return res.status(409).json({ message: 'Email already registered' });
     const user = await User.create({ name, email, password, role: role || 'researcher', department, rank, status: 'pending' });
-    res.status(201).json({ message: 'Registration successful. Await admin approval.', user });
+    res.status(201).json({ message: 'Registration successful. Awaiting Research Director approval.', user });
   } catch (err) { next(err); }
 };
 
@@ -26,7 +26,7 @@ exports.login = async (req, res, next) => {
     if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
     const user = await User.findOne({ email });
     if (!user || !(await user.matchPassword(password))) return res.status(401).json({ message: 'Invalid credentials' });
-    if (user.status === 'pending') return res.status(403).json({ message: 'Account pending admin approval' });
+    if (user.status === 'pending') return res.status(403).json({ message: 'Account pending Research Director approval' });
     if (user.status === 'rejected') return res.status(403).json({ message: 'Account has been rejected' });
     const { accessToken, refreshToken } = generateTokens(user._id);
     user.refreshToken = refreshToken;

@@ -82,6 +82,23 @@ export const dashboardAPI = {
   getStats: () => api.get('/dashboard/stats'),
 };
 
+export const repositoryAPI = {
+  getAll: (params) => api.get('/repository', { params }),
+  getOne: (id) => api.get(`/repository/${id}`),
+  create: (data) => api.post('/repository', data),
+  update: (id, data) => api.patch(`/repository/${id}`, data),
+  delete: (id) => api.delete(`/repository/${id}`),
+  getStats: () => api.get('/repository/stats'),
+};
+
+export const conversationsAPI = {
+  getAll: () => api.get('/conversations'),
+  getOne: (id) => api.get(`/conversations/${id}`),
+  create: (data) => api.post('/conversations', data),
+  sendMessage: (id, data) => api.post(`/conversations/${id}/messages', data),
+  markRead: (id) => api.patch(`/conversations/${id}/read`),
+};
+
 export const reportsAPI = {
   publications: (params) => api.get('/reports/publications', { params }),
   projects: (params) => api.get('/reports/projects', { params }),
@@ -89,3 +106,4 @@ export const reportsAPI = {
   budgetUtilization: (params) => api.get('/reports/budget-utilization', { params }),
   facultyProductivity: (params) => api.get('/reports/faculty-productivity', { params }),
 };
+

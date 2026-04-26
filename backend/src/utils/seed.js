@@ -6,6 +6,8 @@ const Project = require('../models/project.model');
 const Publication = require('../models/publication.model');
 const Budget = require('../models/budget.model');
 const Department = require('../models/department.model');
+const Repository = require('../models/repository.model');
+const Conversation = require('../models/conversation.model');
 
 const randomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -16,7 +18,11 @@ const seed = async () => {
   console.log('🌱 Seeding database with 7 years of data...');
 
   // Clear
-  await Promise.all([User.deleteMany(), Proposal.deleteMany(), Project.deleteMany(), Publication.deleteMany(), Budget.deleteMany(), Department.deleteMany()]);
+  await Promise.all([
+    User.deleteMany(), Proposal.deleteMany(), Project.deleteMany(), 
+    Publication.deleteMany(), Budget.deleteMany(), Department.deleteMany(),
+    Repository.deleteMany(), Conversation.deleteMany()
+  ]);
 
   // Departments
   const depts = await Department.insertMany([
@@ -121,10 +127,42 @@ const seed = async () => {
     }
   }
 
+  // Seed some Repository Assets
+  console.log('📂 Seeding Research Repository assets...');
+  await Repository.create([
+    {
+      title: 'Global Climate Data Archive (2010-2024)',
+      type: 'dataset',
+      department: 'ENV',
+      authorNames: ['Dr. Aisha Musa', 'Global Met Office'],
+      abstract: 'A comprehensive dataset of global climate patterns recorded over 14 years.',
+      year: 2024,
+      accessLevel: 'public',
+      status: 'published',
+      submittedBy: researcher._id,
+      doi: '10.1234/climate.2024.001',
+      plagiarismCheck: { status: 'passed', score: 2, checkedAt: new Date() }
+    },
+    {
+      title: 'PhD Thesis: AI in Modern Agriculture',
+      type: 'thesis',
+      department: 'CS',
+      authorNames: ['Sarah Johnson'],
+      abstract: 'Analysis of machine learning applications in precision farming.',
+      year: 2023,
+      accessLevel: 'institutional',
+      status: 'published',
+      submittedBy: coordinator._id,
+      plagiarismCheck: { status: 'passed', score: 8, checkedAt: new Date() }
+    }
+  ]);
+
   console.log('✅ Seed complete with 7 years of history!');
-  console.log('\n📋 Login credentials (same as before):');
-  console.log('  Admin:       admin@rms.edu       / Password123');
-  console.log('  Researcher:  researcher@rms.edu  / Password123');
+  console.log('\n📋 Login credentials (password: Password123):');
+  console.log('  Director:     admin@rms.edu        / Password123');
+  console.log('  Coordinator:  coordinator@rms.edu  / Password123');
+  console.log('  Finance:      finance@rms.edu       / Password123');
+  console.log('  Researcher:   researcher@rms.edu   / Password123');
   
   await mongoose.disconnect();
 };

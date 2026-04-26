@@ -14,6 +14,8 @@ import Users from './pages/Users';
 import Settings from './pages/Settings';
 import Grants from './pages/Grants';
 import ResearchGroups from './pages/ResearchGroups';
+import Repository from './pages/Repository';
+import Conversations from './pages/Conversations';
 import Profile from './pages/Profile';
 
 function App() {
@@ -33,8 +35,10 @@ function App() {
             <Route path="grants" element={<Grants />} />
             <Route path="budgets" element={<Budgets />} />
             <Route path="reports" element={<Reports />} />
-            <Route path="research-groups" element={<ResearchGroups />} />
-            <Route path="profile" element={<Profile />} />
+            <Route path="/research-groups" element={<ResearchGroups />} />
+            <Route path="/repository" element={<Repository />} />
+            <Route path="/conversations" element={<Conversations />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="users" element={<Users />} />
             <Route path="settings" element={<Settings />} />
           </Route>

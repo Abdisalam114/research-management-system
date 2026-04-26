@@ -62,27 +62,27 @@ export default function Reports() {
     {
       id: 'projects', title: 'Project Report', icon: Briefcase, color: 'var(--accent)',
       description: 'Comprehensive report of all projects including timelines, milestones, and assigned researchers.',
-      roles: ['admin', 'coordinator', 'finance']
+      roles: ['director', 'coordinator', 'finance']
     },
     {
       id: 'publications', title: 'Publication Report', icon: FileText, color: 'var(--success)',
       description: 'Breakdown of publications, journals, citations, and verification statuses.',
-      roles: ['admin', 'coordinator']
+      roles: ['director', 'coordinator']
     },
     {
       id: 'grants', title: 'Grant Report', icon: Award, color: '#8b5cf6',
       description: 'Grant applications, funding sources, amounts, and approval statuses.',
-      roles: ['admin', 'coordinator', 'finance']
+      roles: ['director', 'coordinator', 'finance']
     },
     {
       id: 'budget-utilization', title: 'Budget Utilization Report', icon: DollarSign, color: '#f59e0b',
       description: 'Budget allocation vs. actual expenses, utilization rates per project.',
-      roles: ['admin', 'finance']
+      roles: ['director', 'finance']
     },
     {
       id: 'faculty-productivity', title: 'Faculty Productivity Report', icon: Users, color: '#06b6d4',
       description: 'Research productivity per faculty member: publications, projects, grants, and citations.',
-      roles: ['admin', 'coordinator']
+      roles: ['director', 'coordinator']
     }
   ];
 

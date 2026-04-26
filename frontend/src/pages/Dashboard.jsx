@@ -31,7 +31,7 @@ export default function Dashboard() {
   const recent = stats?.recent || {};
 
   const getRoleGreeting = () => {
-    const roles = { admin: 'Research Director', coordinator: 'Faculty Coordinator', finance: 'Finance Officer', researcher: 'Researcher' };
+    const roles = { director: 'Research Director', coordinator: 'Faculty Research Coordinator', finance: 'Finance Officer', researcher: 'Researcher' };
     return roles[user?.role] || 'User';
   };
 
@@ -42,7 +42,7 @@ export default function Dashboard() {
       { label: 'Publications', value: kpis.publishedPublications || 0, trend: `${kpis.totalPublications || 0} Total`, icon: BookOpen, color: '#10b981' },
     ];
 
-    if (user?.role === 'admin') {
+    if (user?.role === 'director') {
       return [
         ...common,
         { label: 'Pending Proposals', value: kpis.pendingProposals || 0, trend: `${kpis.totalProposals || 0} Total`, icon: FileText, color: '#f59e0b' },

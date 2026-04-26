@@ -160,13 +160,13 @@ export default function Grants() {
                     <td>
                       <div style={{ display: 'flex', gap: '6px' }}>
                         <button className="btn btn-sm btn-secondary" onClick={() => setShowDetail(g)}><Eye size={14} /></button>
-                        {user?.role === 'admin' && g.status === 'submitted' && (
+                        {user?.role === 'director' && g.status === 'submitted' && (
                           <>
                             <button className="btn btn-sm btn-success" onClick={() => handleReview(g._id, 'approve')}><Check size={14} /></button>
                             <button className="btn btn-sm btn-danger" onClick={() => handleReview(g._id, 'reject')}><XCircle size={14} /></button>
                           </>
                         )}
-                        {(g.applicant?._id === user?._id || user?.role === 'admin') && ['draft'].includes(g.status) && (
+                        {(g.applicant?._id === user?._id || user?.role === 'director') && ['draft'].includes(g.status) && (
                           <button className="btn btn-sm btn-danger" onClick={() => handleDelete(g._id)}><X size={14} /></button>
                         )}
                       </div>
@@ -290,7 +290,7 @@ export default function Grants() {
                 </div>
               )}
             </div>
-            {user?.role === 'admin' && showDetail.status === 'submitted' && (
+            {user?.role === 'director' && showDetail.status === 'submitted' && (
               <div className="form-actions" style={{ marginTop: '20px' }}>
                 <button className="btn btn-success" onClick={() => handleReview(showDetail._id, 'approve')}><Check size={14} /> Approve</button>
                 <button className="btn btn-danger" onClick={() => handleReview(showDetail._id, 'reject')}><XCircle size={14} /> Reject</button>

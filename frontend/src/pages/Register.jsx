@@ -24,7 +24,7 @@ export default function Register() {
     setIsLoading(true);
     try {
       await authAPI.register(formData);
-      toast.success('Registration successful. Awaiting admin approval.');
+      toast.success('Registration successful. Awaiting Research Director approval.');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Registration failed');

@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { 
   LayoutDashboard, FileText, Briefcase, BookOpen, 
   Wallet, PieChart, Users, Settings, LogOut, 
-  DollarSign, UsersRound, User
+  DollarSign, UsersRound, User, Database, MessageSquare
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -24,6 +24,8 @@ export default function Sidebar() {
     { name: 'Budgets', path: '/budgets', icon: Wallet, roles: ['director', 'finance', 'researcher'] },
     { name: 'Reports', path: '/reports', icon: PieChart, roles: ['director', 'coordinator', 'finance'] },
     { name: 'Research Groups', path: '/research-groups', icon: UsersRound, roles: ['director', 'coordinator', 'researcher'] },
+    { name: 'Repository', path: '/repository', icon: Database, roles: ['director', 'coordinator', 'researcher', 'finance'] },
+    { name: 'Messaging', path: '/conversations', icon: MessageSquare, roles: ['director', 'coordinator', 'researcher', 'finance'] },
     { name: 'My Profile', path: '/profile', icon: User, roles: ['researcher'] },
   ];
 
